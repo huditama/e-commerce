@@ -6,7 +6,7 @@ import "./stylus/main.styl"
 import VueSwal from 'vue-swal';
 import axios from "axios"
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'http://ecommerce-server.reyhanhuditama.com';
 Vue.prototype.$axios = axios;
 
 Vue.use(VueSwal);

@@ -1,5 +1,6 @@
 const Cart = require('../models/cart')
 const Product = require('../models/product')
+const sendEmail = require('../helpers/email')
 
 class cartController {
     static create(req, res) {
@@ -117,7 +118,7 @@ class cartController {
     }
 
     static checkout(req, res) {
-        const { id } = req.authenticatedUser
+        const { id, email } = req.authenticatedUser
         const { details } = req.body
         let ProductId = []
         let quantity = []
@@ -151,6 +152,11 @@ class cartController {
                     .findOneAndUpdate({ UserId: id }, { products: [] }, { new: true })
             })
             .then((updatedCart) => {
+                let emailText = ''
+                details.forEach((x) => {
+                    emailText += `${x.ProductId.name} Rp. ${x.ProductId.price * x.quantity} \n`
+                })
+                sendEmail(email, emailText)
                 res.status(200).json({ message: 'Thank you for shopping with us!', updatedCart })
             })
             .catch((err) => {
